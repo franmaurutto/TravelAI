@@ -1,78 +1,95 @@
-def construir_prompt(consulta, contexto):
+def construir_prompt(consulta, preferencias, contexto):
 
     prompt = f"""
 Eres TravelAI, un sistema experto de planificación
 inteligente de viajes.
 
-Tu objetivo es generar itinerarios personalizados
-a partir de las preferencias y restricciones
-del usuario.
+Tu objetivo es generar un itinerario personalizado.
 
-Debes seguir las siguientes reglas:
+PREFERENCIAS EXTRAÍDAS DEL USUARIO:
+
+Destino:
+{preferencias.get("destino")}
+
+Cantidad de días:
+{preferencias.get("dias")}
+
+Cantidad de personas:
+{preferencias.get("personas")}
+
+Presupuesto:
+{preferencias.get("presupuesto")}
+
+Intereses:
+{preferencias.get("intereses")}
+
+Transporte preferido:
+{preferencias.get("transporte")}
+
+Máximo de actividades por día:
+{preferencias.get("max_actividades_dia")}
+
+
+REGLAS:
 
 1. Respetar las restricciones indicadas por el usuario.
-2. Respetar el presupuesto indicado.
-3. Priorizar los intereses del usuario.
-4. Respetar las preferencias de transporte.
-5. No superar el número máximo de actividades por día.
-6. Utilizar la información proporcionada en el contexto.
-7. No inventar información que no esté respaldada
-   por el contexto.
-8. Si la información necesaria no está disponible,
-   indicarlo claramente.
+2. Respetar el presupuesto.
+3. Priorizar los intereses.
+4. Respetar el transporte preferido.
+5. No superar el máximo de actividades por día.
+6. Utilizar solamente información respaldada por el contexto.
+7. No inventar lugares, actividades o datos.
+8. Si falta información, indicarlo.
+
 
 CONTEXTO RECUPERADO:
+
 {contexto}
 
-SOLICITUD DEL USUARIO:
+
+SOLICITUD ORIGINAL:
+
 {consulta}
 
-Si el usuario solicita un itinerario:
 
-- organizarlo por días;
-- respetar la cantidad máxima de actividades;
-- procurar una distribución coherente;
-- explicar brevemente las actividades propuestas.
+Genera un itinerario organizado por días.
+
+Cada día debe tener como máximo la cantidad
+de actividades indicada por el usuario.
 
 RESPUESTA:
 """
 
     return prompt
 
-def generar_plan(consulta, retriever, generar_respuesta):
 
-    # -----------------------------------------------
-    # 1. Recuperar documentos relevantes
-    # -----------------------------------------------
+def generar_plan(consulta, preferencias, retriever, generar_respuesta):
+
+    print("   → Buscando información en el RAG...")
 
     resultados = retriever.invoke(consulta)
 
-
-    # -----------------------------------------------
-    # 2. Construir contexto
-    # -----------------------------------------------
+    print(
+        f"   → RAG recuperó {len(resultados)} documentos."
+    )
 
     contexto = "\n\n".join(
         doc.page_content
         for doc in resultados
     )
 
-
-    # -----------------------------------------------
-    # 3. Construir prompt
-    # -----------------------------------------------
+    print("   → Construyendo prompt...")
 
     prompt = construir_prompt(
         consulta,
+        preferencias,
         contexto
     )
 
-
-    # -----------------------------------------------
-    # 4. Enviar prompt al LLM
-    # -----------------------------------------------
+    print("   → Enviando solicitud a Gemini para generar itinerario...")
 
     respuesta = generar_respuesta(prompt)
 
+    print("   → Gemini generó el itinerario.")
 
     return respuesta

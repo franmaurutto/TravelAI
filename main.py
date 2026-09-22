@@ -15,15 +15,33 @@ def main():
     Generá un itinerario personalizado.
     """
 
-    respuesta = travel_ai(consulta)
-
     print("\n")
     print("=" * 60)
     print("TRAVELAI")
     print("=" * 60)
-    print()
-    print(respuesta)
-    print()
+
+    print("\nSolicitud:")
+    print(consulta)
+
+    print("\nGenerando itinerario...\n")
+
+    try:
+
+        respuesta = travel_ai(consulta)
+
+        print("=" * 60)
+        print("ITINERARIO")
+        print("=" * 60)
+
+        print(respuesta)
+
+    except RuntimeError as e:
+
+        print("\n" + "=" * 60)
+        print("ERROR")
+        print("=" * 60)
+
+        print(e)
 
 
 if __name__ == "__main__":
