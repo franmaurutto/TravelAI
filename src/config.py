@@ -21,13 +21,13 @@ VECTORSTORE_PATH = PROJECT_PATH / "vectorstore"
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
+GEOAPIFY_API_KEY = os.getenv("GEOAPIFY_API_KEY")
 
 if not GEMINI_API_KEY:
-    raise ValueError(
-        "No se encontró GEMINI_API_KEY. "
-        "Verificá el archivo .env"
-    )
+    raise ValueError("No se encontró GEMINI_API_KEY. Verificá el archivo .env")
+
+if not GEOAPIFY_API_KEY:
+    raise ValueError("No se encontró GEOAPIFY_API_KEY. Verificá el archivo .env")
 
 
 # --------------------------------------------------
