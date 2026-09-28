@@ -4,10 +4,11 @@ from src.travel_ai import travel_ai
 def main():
     # Consulta de prueba realista
     consulta = (
-        "Hola! Quiero viajar a Buenos Aires por 3 días. "
-        "Me interesa mucho la gastronomía y la cultura. "
-        "Prefiero caminar, con presupuesto medio y no hacer más de 3 actividades por día."
-    )
+    "Hola! Quiero viajar a Buenos Aires por 3 días. "
+    "Somos 2 personas. "
+    "Me interesa mucho la gastronomía y la cultura. "
+    "Prefiero caminar, con presupuesto medio y no hacer más de 3 actividades por día."
+)
 
     itinerario_final = travel_ai(consulta)
 

@@ -15,8 +15,21 @@ No queremos hacer más de 3 actividades por día.
 preferencias = extraer_preferencias(consulta)
 
 
-print("PREFERENCIAS EXTRAÍDAS")
-print("======================")
+print("TEST DE PREFERENCIAS")
+print("=" * 50)
 
-for clave, valor in preferencias.items():
-    print(f"{clave}: {valor}")
+print(preferencias)
+
+
+assert preferencias["destino"] == "Buenos Aires"
+assert preferencias["dias"] == 5
+assert preferencias["personas"] == 2
+assert preferencias["presupuesto"] == "medio"
+assert "gastronomía" in preferencias["intereses"]
+assert "cultura" in preferencias["intereses"]
+assert preferencias["transporte"] == "caminar"
+assert preferencias["max_actividades_dia"] == 3
+
+
+print("=" * 50)
+print("✓ Todas las preferencias fueron extraídas correctamente.")

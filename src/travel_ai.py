@@ -2,38 +2,64 @@ from .retriever import crear_retriever
 from .llm import generar_respuesta
 from .planner import generar_plan
 from .user_preferences import extraer_preferencias
+from .validator import validar_itinerario
 
-print("1. Inicializando base vectorial y Retriever...")
+
 retriever = crear_retriever(k=4)
-print("2. Retriever listo.")
 
 
-def travel_ai(consulta: str):
-    """
-    Función principal de TravelAI:
-    1. Extrae las preferencias del usuario (NLP / Reglas).
-    2. Consulta la base de conocimiento (RAG).
-    3. Consulta la API externa (Geoapify Lugares y Rutas).
-    4. Genera el itinerario personalizado usando Gemini.
-    """
-    print("\n" + "=" * 50)
-    print("🚀 INICIANDO PLANIFICACIÓN CON TRAVELAI")
-    print("=" * 50)
-    print(f"Consulta: \"{consulta}\"\n")
+def travel_ai(consulta):
 
-    print("3. Extrayendo preferencias y restricciones...")
+    # -------------------------
+    # 1. Extraer preferencias
+    # -------------------------
+
+    print("\n3. Extrayendo preferencias...")
+
     preferencias = extraer_preferencias(consulta)
-    print("4. Preferencias extraídas:")
-    for k, v in preferencias.items():
-        print(f"   • {k}: {v}")
 
-    print("\n5. Generando plan (RAG + Geoapify + Gemini)...")
+    print("\n4. Preferencias extraídas:")
+
+    for clave, valor in preferencias.items():
+        print(f"   {clave}: {valor}")
+
+    # -------------------------
+    # 2. Generar itinerario
+    # -------------------------
+
+    print("\n5. Generando plan...")
+
     respuesta = generar_plan(
-        consulta=consulta,
-        preferencias=preferencias,
-        retriever=retriever,
-        generar_respuesta=generar_respuesta
+        consulta,
+        preferencias,
+        retriever,
+        generar_respuesta
     )
 
-    print("\n6. ✅ Plan generado exitosamente.")
+    # -------------------------
+    # 3. Validar itinerario
+    # -------------------------
+
+    print("   → Validando itinerario...")
+
+    validacion = validar_itinerario(
+        respuesta,
+        preferencias
+    )
+
+    # -------------------------
+    # 4. Mostrar resultado
+    # -------------------------
+
+    if validacion["valido"]:
+
+        print("   → ✓ Itinerario válido.")
+
+    else:
+
+        print("   → ⚠ El itinerario no cumple todas las reglas.")
+
+        for error in validacion["errores"]:
+            print(f"      - {error}")
+
     return respuesta

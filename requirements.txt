@@ -2,6 +2,9 @@ google-genai
 langchain
 langchain-community
 langchain-core
+langchain-chroma
 chromadb
+langchain-text-splitters
 python-dotenv
 tiktoken
+requests

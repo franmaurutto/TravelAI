@@ -1,4 +1,20 @@
-.env
-__pycache__/
-*.pyc
+# Entorno virtual
 .venv/
+.venv_travelai/
+
+# Variables de entorno
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
